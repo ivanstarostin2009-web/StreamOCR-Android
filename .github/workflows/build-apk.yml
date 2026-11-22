@@ -39,9 +39,11 @@ jobs:
           packages: 'platform-tools platforms;android-35 build-tools;35.0.0'
           accept-android-sdk-licenses: true
 
-      - name: Build APK
+      
+      - name: Fix Tesseract dependency
         run: |
-          gradle -p extracted/StreamOCR_Android --no-daemon :app:assembleDebug
+          sed -i 's/com.googlecode.tesseract.android:tess-two/com.rmtheis:tess-two/g' extracted/StreamOCR_Android/app/build.gradle.kts
+          grep -n 'tess-two' extracted/StreamOCR_Android/app/build.gradle.kts
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
