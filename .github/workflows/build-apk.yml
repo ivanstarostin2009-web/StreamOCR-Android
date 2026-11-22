@@ -44,6 +44,16 @@ jobs:
           sed -i 's/com.googlecode.tesseract.android:tess-two/com.rmtheis:tess-two/g' extracted/StreamOCR_Android/app/build.gradle.kts
           grep -n 'tess-two' extracted/StreamOCR_Android/app/build.gradle.kts
 
+      - name: Set Java compatibility to 17
+        run: |
+          cat >> extracted/StreamOCR_Android/app/build.gradle.kts <<'EOF'
+
+          tasks.withType<JavaCompile>().configureEach {
+              sourceCompatibility = "17"
+              targetCompatibility = "17"
+          }
+          EOF
+
       - name: Build APK
         run: |
           gradle -p extracted/StreamOCR_Android --no-daemon :app:assembleDebug
@@ -59,3 +69,4 @@ jobs:
           name: StreamOCR-debug-apk
           path: extracted/StreamOCR_Android/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
+          
